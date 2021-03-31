@@ -18,3 +18,15 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'username'
+
+
+class Operation(models.Model):
+    TRANSACTION_TYPES = (
+        ('Purchase', 'Purchase'),
+        ('Refund', 'Refund'),
+        ('Withdrawal', 'Withdrawal')
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='operations')
+    amount = models.IntegerField(default=0)
+    operation_type = models.CharField(max_length=64, choices=TRANSACTION_TYPES, default='Purchase')
+    date_created = models.DateTimeField(auto_now_add=True)
